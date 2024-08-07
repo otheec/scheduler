@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Task } from '../model/Task';
 
 const styles: { [key: string]: React.CSSProperties } = {
   grid: {
@@ -18,7 +19,6 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   draggable: {
     height: '40px',
-    backgroundColor: '#ff5722',
     position: 'absolute',
     top: '50%',
     left: '0',
@@ -42,17 +42,11 @@ const styles: { [key: string]: React.CSSProperties } = {
 interface GridProps {
   rows: number;
   columns: number;
+  items: Task[];
+  setItems: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const Grid: React.FC<GridProps> = ({ rows, columns }) => {
-  const [items, setItems] = useState<{ name: string; row: number; column: number; width: number; draggable: boolean }[]>([
-    { name: 'Item 1', row: 0, column: 0, width: 3, draggable: true },
-    { name: 'Item 2', row: 1, column: 5, width: 2, draggable: true },
-    { name: 'Item 3', row: 2, column: 5, width: 5, draggable: true },
-    { name: 'Item 4', row: 3, column: 5, width: 7, draggable: true },
-    { name: 'Item 5', row: 4, column: 5, width: 14, draggable: false },
-  ]);
-
+const Grid: React.FC<GridProps> = ({ rows, columns, items, setItems }) => {
   const [dragging, setDragging] = useState(false);
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
   const [dragStartPosition, setDragStartPosition] = useState<{ x: number; y: number } | null>(null);
@@ -161,6 +155,7 @@ const Grid: React.FC<GridProps> = ({ rows, columns }) => {
           item.row === row && column >= item.column && column < item.column + item.width
         );
         const isDraggedItem = itemIndex !== -1 && draggedItemIndex === itemIndex;
+        const item = items[itemIndex];
 
         return (
           <div
@@ -171,14 +166,15 @@ const Grid: React.FC<GridProps> = ({ rows, columns }) => {
             }}
             onMouseDown={(e) => itemIndex !== -1 && handleMouseDown(e, itemIndex)}
           >
-            {itemIndex !== -1 && column === items[itemIndex].column && (
+            {itemIndex !== -1 && column === item.column && (
               <div
                 style={{
                   ...styles.draggable,
-                  width: `calc(15px * ${items[itemIndex].width} + 1px * ${items[itemIndex].width - 1})`,
+                  width: `calc(15px * ${item.width} + 1px * ${item.width - 1})`,
+                  backgroundColor: item.draggable ? 'green' : '#ff5722',
                 }}
               >
-                <div style={styles.itemName}>{items[itemIndex].name}</div>
+                <div style={styles.itemName}>{item.name}</div>
               </div>
             )}
           </div>
