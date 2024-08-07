@@ -1,38 +1,55 @@
+/* App.css */
+
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 1px; /* Space between cells */
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  background-color: grey; /* Grid background color */
+}
+
+.cell {
+  width: 15px; /* Fixed width for each cell */
+  height: 40px; /* Adjust as needed for your layout */
+  text-align: center;
+  background-color: #e0e0e0;
+  position: relative;
+}
+
+.draggable {
+  height: 40px;
+  background-color: #ff5722;
+  position: absolute;
+  top: 50%;
+  left: 0; /* Align to the start */
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.item-name {
+  flex-grow: 1;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.cell.dragover {
+  background-color: #cfd8dc;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input {
+  margin: 5px;
+  padding: 5px;
 }
