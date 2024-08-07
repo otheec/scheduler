@@ -1,10 +1,22 @@
-// App.tsx
-
 import React, { useState, useEffect } from 'react';
 import Grid from './components/Grid';
-import './App.css';
 
-function App() {
+// Define styles using React.CSSProperties for type safety
+const styles: { [key: string]: React.CSSProperties } = {
+  app: {
+    display: 'flex',
+    flexDirection: 'column' as 'column', // Explicitly cast to 'column'
+    justifyContent: 'center' as 'center', // Explicitly cast to 'center'
+    alignItems: 'center' as 'center', // Explicitly cast to 'center'
+    height: '100vh',
+  },
+  input: {
+    margin: '5px',
+    padding: '5px',
+  },
+};
+
+const App = () => {
   const [rows, setRows] = useState(5);
   const [columns, setColumns] = useState((60 / 5) * 8);
   const [dragging, setDragging] = useState(false);
@@ -104,7 +116,7 @@ function App() {
   }, [dragging]);
 
   return (
-    <div className="App">
+    <div style={styles.app}>
       <div>
         <label>
           Rows:
@@ -113,6 +125,7 @@ function App() {
             value={rows}
             onChange={(e) => setRows(Number(e.target.value))}
             min="1"
+            style={styles.input}
           />
         </label>
         <label>
@@ -122,6 +135,7 @@ function App() {
             value={columns}
             onChange={(e) => setColumns(Number(e.target.value))}
             min="1"
+            style={styles.input}
           />
         </label>
       </div>
@@ -135,6 +149,6 @@ function App() {
       />
     </div>
   );
-}
+};
 
 export default App;
