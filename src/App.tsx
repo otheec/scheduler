@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+// App.tsx
+
+import React, { useState, useEffect } from 'react';
+import Grid from './components/Grid';
 import './App.css';
 
 function App() {
@@ -14,9 +17,6 @@ function App() {
     { name: 'Item 4', row: 3, column: 5, width: 7, draggable: true },
     { name: 'Item 5', row: 4, column: 5, width: 14, draggable: false },
   ]);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  const cells = Array.from({ length: rows * columns });
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>, itemIndex: number) => {
     if (!items[itemIndex].draggable) return;
@@ -28,7 +28,7 @@ function App() {
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!dragging || !dragStartPosition || !gridRef.current || draggedItemIndex === null) return;
+    if (!dragging || !dragStartPosition || draggedItemIndex === null) return;
 
     const cellWidth = 15 + 1; // 15px width + 1px gap
     const cellHeight = 40 + 1; // 40px height + 1px gap
@@ -125,44 +125,14 @@ function App() {
           />
         </label>
       </div>
-      <div
-        className="grid"
-        ref={gridRef}
-        style={{
-          gridTemplateColumns: `repeat(${columns}, 15px)`,
-          gridTemplateRows: `repeat(${rows}, 40px)`,
-        }}
-      >
-        {cells.map((_, index) => {
-          const row = Math.floor(index / columns);
-          const column = index % columns;
-          const itemIndex = items.findIndex(item =>
-            item.row === row && column >= item.column && column < item.column + item.width
-          );
-          const isDraggedItem = itemIndex !== -1 && draggedItemIndex === itemIndex;
-
-          return (
-            <div
-              key={index}
-              className={`cell ${dragging && isDraggedItem ? 'dragover' : ''}`}
-              onMouseDown={(e) => itemIndex !== -1 && handleMouseDown(e, itemIndex)}
-            >
-              {itemIndex !== -1 && column === items[itemIndex].column && (
-                <div
-                  className={`draggable ${items[itemIndex].draggable ? '' : 'non-draggable'}`}
-                  style={{
-                    width: `calc(15px * ${items[itemIndex].width} + 1px * ${items[itemIndex].width - 1})`,
-                    transform: 'translate(0, -50%)',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <div className="item-name">{items[itemIndex].name}</div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <Grid
+        rows={rows}
+        columns={columns}
+        items={items}
+        dragging={dragging}
+        draggedItemIndex={draggedItemIndex}
+        handleMouseDown={handleMouseDown}
+      />
     </div>
   );
 }
